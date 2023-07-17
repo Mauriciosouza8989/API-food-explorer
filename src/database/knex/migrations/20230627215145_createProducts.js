@@ -7,8 +7,8 @@ exports.up = knex => knex.schema.createTable("products", (table) => {
       table.text("category");
       table.float("price");
       table.integer("user_id").references("id").inTable("users");
-      table.timestamp("created_at").defaultTo(knex.fn.now());
-      table.timestamp("updated_at").defaultTo(knex.fn.now());
+      table.timestamp("created_at").default(knex.fn.now());
+      table.timestamp("updated_at").default(knex.fn.now());
 });
 
 
