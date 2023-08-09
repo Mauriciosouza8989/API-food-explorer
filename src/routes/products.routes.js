@@ -10,12 +10,14 @@ const productsController = new ProductsController();
 
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
+productsRoutes.use(ensureAuthenticated);
 
 productsRoutes.get('/', productsController.index);
 productsRoutes.get('/:id', productsController.show);
-productsRoutes.post('/', ensureAuthenticated, upload.single("image"), productsController.create);
-productsRoutes.put('/:id', ensureAuthenticated, productsController.update);
-productsRoutes.delete('/:id', ensureAuthenticated, productsController.delete);
+productsRoutes.post('/', upload.single("image"), productsController.create);
+productsRoutes.put('/:id', productsController.update);
+productsRoutes.delete('/:id', productsController.delete);
+
 
 
 module.exports = productsRoutes;

@@ -5,7 +5,6 @@ const createUsers = `
         email VARCHAR,
         password VARCHAR,
         avatar VARCHAR NULL,
-        cart INTEGER,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );

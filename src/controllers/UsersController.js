@@ -11,9 +11,6 @@ class UsersController{
 
         const checkUserExists = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
 
-        if(!email || !name || !password){
-            throw new AppError("Erro: preencha todos os campos!");
-        }
         if(checkUserExists){
             throw new AppError("Este email já está em uso!");
         }
