@@ -15,7 +15,7 @@ productsRoutes.use(ensureAuthenticated);
 productsRoutes.get('/', productsController.index);
 productsRoutes.get('/:id', productsController.show);
 productsRoutes.post('/', upload.single("image"), productsController.create);
-productsRoutes.put('/:id', productsController.update);
+productsRoutes.put('/:id', upload.single("image"), productsController.update);
 productsRoutes.delete('/:id', productsController.delete);
 
 

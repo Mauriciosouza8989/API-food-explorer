@@ -37,12 +37,16 @@ class ProductsController {
         
         const diskStorage = new DiskStorage();
 
+        if(!user_id){
+          throw new AppError("Você não tem permissão para executar essta ação.");
+        }
+
         const filename = await diskStorage.saveFile(image);
-      
         if (user_id !== 1) {
           await diskStorage.deleteFile(image);
           throw new AppError("Você não tem permissão para executar essta ação.");
         }
+        
       
       
         const checkIfProductExists = await knex("products").where({ name: name }).first();
@@ -89,7 +93,20 @@ class ProductsController {
         const { id } = req.params;
         const user_id = req.user.id;
 
-        const product = await knex.select("*").from("products").where({id: id}).first();
+        if(!user_id){
+            throw new AppError("Você não tem permissão para executar essta ação.");
+          }
+
+        const diskStorage = new DiskStorage();
+
+
+        const filename = await diskStorage.saveFile(image);
+        if (user_id !== 1) {
+          await diskStorage.deleteFile(image);
+          throw new AppError("Você não tem permissão para executar essta ação.");
+        }
+
+        const product = await knex.select("*").from("products").where({id}).first();
         if(product.user_id !== user_id){
             throw new AppError("Você não tem permissão para atualizar este produto!");
         }
@@ -98,19 +115,36 @@ class ProductsController {
             throw new AppError("Já existe um produto cadastrado comeste nome!");
         }
         
+        
 
+        try{
+            await knex("products").where({id}).update(
+                {
+                    name,
+                    description,
+                    image: filename,
+                    category,
+                    price,
+                    updated_at: knex.fn.now()
+                }
+            );
+            const product_id = product.id;
 
-        await knex("products").where({id: id}).update(
-            {
-                name,
-                description,
-                image,
-                category,
-                price,
-                updated_at: knex.fn.now()
-            }
-        );
-        return res.status(201).send("Produto atualizado!");
+            await knex('products').where({product_id }).del();
+            const arrayIngredients = ingredients.split(',');
+            const insertIngredients = arrayIngredients.map(ingredient => {
+              return {
+                name: ingredient,
+              };
+            });
+        
+            await knex("ingredients").insert(insertIngredients);
+
+            return res.status(201).json({message: "Produto atualizado com sucesso!"});
+        }catch(err){
+            await diskStorage.deleteFile(image);
+            throw new AppError("Opa, ocorreu algum erro!");
+        }
 
     }
 
@@ -126,7 +160,7 @@ class ProductsController {
             throw new AppError("O produto não existe!");
         }
 
-        await knex('products').where({ id: id }).del();
+        await knex('products').where({ id }).del();
         
         return res.json({
             message: "Produto deletado com sucesso!"

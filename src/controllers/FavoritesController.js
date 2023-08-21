@@ -7,6 +7,13 @@ class FavoritesController{
         const { product_id } = req.params;
 
         const product = await knex("products").where({id: product_id}).first();
+        const favoriteProduct = await knex("favorites").where({product_id}).first();
+
+        if(favoriteProduct){
+            await knex("favorites").where({ product_id }).del();
+            return;
+        }
+
         if(!product){
             throw new AppError("Este produto não existe!")
         }
@@ -23,6 +30,7 @@ class FavoritesController{
         const favorites = await knex("favorites").where({user_id})
         return res.json(favorites);
     }
+
 }
 
 module.exports = FavoritesController;
