@@ -96,8 +96,9 @@ class ProductsController {
         if(!user_id){
             throw new AppError("Você não tem permissão para executar essta ação.");
           }
-
         const diskStorage = new DiskStorage();
+        const product = await knex.select("*").from("products").where({id}).first();
+        await diskStorage.deleteFile(product.image)
 
 
         const filename = await diskStorage.saveFile(image);
@@ -106,7 +107,6 @@ class ProductsController {
           throw new AppError("Você não tem permissão para executar essta ação.");
         }
 
-        const product = await knex.select("*").from("products").where({id}).first();
         if(product.user_id !== user_id){
             throw new AppError("Você não tem permissão para atualizar este produto!");
         }
@@ -118,23 +118,24 @@ class ProductsController {
         
 
         try{
-            await knex("products").where({id}).update(
-                {
-                    name,
-                    description,
-                    image: filename,
-                    category,
-                    price,
-                    updated_at: knex.fn.now()
-                }
-            );
+            product.name = name ?? product.name;
+            product.category = category ?? product.category;
+            product.price = price ?? product.price;
+            product.description = description ?? product.description;
+            product.updated_at = knex.fn.now();
+        
+            await knex('products').where({ id }).update(product);
+
             const product_id = product.id;
 
-            await knex('products').where({product_id }).del();
+            await knex('ingredients').where({ product_id: product.id}).del()
+            
             const arrayIngredients = ingredients.split(',');
             const insertIngredients = arrayIngredients.map(ingredient => {
               return {
                 name: ingredient,
+                product_id,
+                user_id
               };
             });
         
