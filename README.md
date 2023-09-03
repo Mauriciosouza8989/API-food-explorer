@@ -5,11 +5,10 @@ API Rest completa utilizando Node.js e Expresss, de um menu digital para um rest
 </p> 
 
 <p align="center">
-  <a href="#estrutura-do-banco-de-dados">Banco de dados</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#como-rodar">Como rodar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#endpoints">Endpoints</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#foi-utilizado">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/eduardonobrega/food-explorer-frontend">Front-end</a>&nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/Mauriciosouza8989/Mauriciosouza8989-food-explorer-tree-main-front-food-explorer">Front-end</a>&nbsp;&nbsp;&nbsp;
 </p>
 
 
