@@ -20,10 +20,20 @@ class SessionsConttroller{
 
         const { secret, expiresIn } = authConfig.jwt;
 
-        const token = sign({}, secret, {
+        const token = sign({role: user.role}, secret, {
             subject: String(user.id),
             expiresIn
         })
+
+        response.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "Strict",
+            secure: true,
+            maxAge: 60 * 60 * 12000 
+        })
+
+        delete user.password;
+        delete user.email;
 
         return res.json({user, token});
     }

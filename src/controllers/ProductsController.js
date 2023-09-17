@@ -34,6 +34,7 @@ class ProductsController {
         const image = req.file.filename;
         // return console.log(name, category, price, description, ingredients, image);
         const user_id = req.user.id;
+        const role = req.user.role;
         
         const diskStorage = new DiskStorage();
 
@@ -42,7 +43,7 @@ class ProductsController {
         }
 
         const filename = await diskStorage.saveFile(image);
-        if (user_id !== 1) {
+        if (role!== "admin") {
           await diskStorage.deleteFile(image);
           throw new AppError("Você não tem permissão para executar essta ação.");
         }
@@ -92,6 +93,7 @@ class ProductsController {
         const { image, name, category, price, ingredients, description} = req.body; 
         const { id } = req.params;
         const user_id = req.user.id;
+        const role = req.user.role;
 
         if(!user_id){
             throw new AppError("Você não tem permissão para executar essta ação.");
@@ -102,7 +104,7 @@ class ProductsController {
 
 
         const filename = await diskStorage.saveFile(image);
-        if (user_id !== 1) {
+        if (role !== "admin") {
           await diskStorage.deleteFile(image);
           throw new AppError("Você não tem permissão para executar essta ação.");
         }
@@ -152,9 +154,12 @@ class ProductsController {
     async delete(req, res){
         const {id} = req.params;
         const user_id = req.user.id;
-        const user = await knex("users").where({email:"admin@admin.com"}).first();
-        if(user_id !== user.id) {
-            throw new AppError("Você não tem permissão para deletar um produto!");
+        if(!user_id){
+          throw new AppError("unauthorized", 401)
+        }
+        const user = await knex("users").where({role:"admin"}).first();
+        if(!user) {
+            throw new AppError("Você não tem permissão para deletar um produto!",401);
         }
         const product = await knex('products').where({ id: id }).first();
         if(!product){
