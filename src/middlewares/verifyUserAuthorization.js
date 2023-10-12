@@ -1,6 +1,6 @@
 const AppError = require("../utils/AppError");
 
-function verifyUserAuthorization(roleToVerify) {
+function verifyUserAuthorization(roleToVerify){
     return(req, res, next)=>{
         const {role} = req.user;
         if(roleToVerify != role){

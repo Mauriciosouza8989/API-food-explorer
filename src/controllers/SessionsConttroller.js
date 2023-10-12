@@ -25,11 +25,11 @@ class SessionsConttroller{
             expiresIn
         })
 
-        response.cookie("token", token, {
+        res.cookie("token", token, {
             httpOnly: true,
             sameSite: "Strict",
             secure: true,
-            maxAge: 60 * 60 * 12000 
+            maxAge: 60 * 60 * 1000 
         })
 
         delete user.password;
