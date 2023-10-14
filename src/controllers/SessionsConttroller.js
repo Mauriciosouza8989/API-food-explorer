@@ -27,15 +27,14 @@ class SessionsConttroller{
 
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "Strict",
+            sameSite: "none",
             secure: true,
-            maxAge: 60 * 60 * 1000 
+            maxAge: 120 * 60 *1000
         })
 
         delete user.password;
-        delete user.email;
 
-        return res.json({user, token});
+        return res.json({user});
     }
 }
 

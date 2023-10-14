@@ -14,11 +14,11 @@ const verifyUserAuthorization = require("../middlewares/verifyUserAuthorization"
 
 productsRoutes.use(ensureAuthenticated);
 
-productsRoutes.get('/', productsController.index);
-productsRoutes.get('/:id', productsController.show);
-productsRoutes.post('/', verifyUserAuthorization("admin"), upload.single("image"), productsController.create);
-productsRoutes.put('/:id', verifyUserAuthorization("admin"), upload.single("image"), productsController.update);
-productsRoutes.delete('/:id', verifyUserAuthorization("admin"), productsController.delete);
+productsRoutes.get('/', verifyUserAuthorization(["admin", "customer"]), productsController.index);
+productsRoutes.get('/:id', verifyUserAuthorization(["admin", "customer"]), productsController.show);
+productsRoutes.post('/', verifyUserAuthorization(["admin"]), upload.single("image"), productsController.create);
+productsRoutes.put('/:id', verifyUserAuthorization(["admin"]), upload.single("image"), productsController.update);
+productsRoutes.delete('/:id', verifyUserAuthorization(["admin"]), productsController.delete);
 
 
 

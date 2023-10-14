@@ -8,12 +8,11 @@ class ProductsController {
         let products;
         if(name){
             products = await knex("products")
-                        .where({user_id: 1})
                         .whereLike("name", `%${name}%`)
                         .orderBy("name");
         }else{
             products = await knex("products")
-                        .where({user_id: 1})
+                        .select("*")
                         .orderBy("name");
         }
         
@@ -122,11 +121,20 @@ class ProductsController {
         try{
             product.name = name ?? product.name;
             product.category = category ?? product.category;
+            product.image = filename,
             product.price = price ?? product.price;
             product.description = description ?? product.description;
             product.updated_at = knex.fn.now();
         
-            await knex('products').where({ id }).update(product);
+            await knex('products').where({ id }).update({
+              name,
+              category,
+              image,
+              price,
+              description,
+              updated_at,
+
+            });
 
             const product_id = product.id;
 

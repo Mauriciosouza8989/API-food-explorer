@@ -8,7 +8,7 @@ const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 const verifyUserAuthorization = require("../middlewares/verifyUserAuthorization");
 
 
-favoritesRoutes.get("/",ensureAuthenticated, favoritesController.index);
-favoritesRoutes.post("/:product_id", ensureAuthenticated, favoritesController.create);
+favoritesRoutes.get("/", verifyUserAuthorization(["customer"]),ensureAuthenticated, favoritesController.index);
+favoritesRoutes.post("/:product_id", verifyUserAuthorization(["customer"]), ensureAuthenticated, favoritesController.create);
 
 module.exports = favoritesRoutes;
