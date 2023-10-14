@@ -11,7 +11,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 app.use(cookieParser());
 app.use(cors({
-    origin: ["https://front-food-explorer.netlify.app/", "127.0.0.1:5173/"],
+    origin: ["https://front-food-explorer.netlify.app", "127.0.0.1:5173"],
     credentials: true
 }));
 app.use(express.json());
