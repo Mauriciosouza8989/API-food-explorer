@@ -126,15 +126,7 @@ class ProductsController {
             product.description = description ?? product.description;
             product.updated_at = knex.fn.now();
         
-            await knex('products').where({ id }).update({
-              name,
-              category,
-              image,
-              price,
-              description,
-              updated_at,
-
-            });
+            await knex('products').where({ id }).update(product);
 
             const product_id = product.id;
 
